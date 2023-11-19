@@ -1,6 +1,6 @@
 Options -MultiViews
 RewriteEngine On
-RewriteBase /training/20201130/public
+RewriteBase /ALnote/public
 
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
