@@ -23,7 +23,7 @@ class Core {
 		}
 	}
 
-	private function auto(){
+	private function auto() {
 		dd(__METHOD__);
 	}
 
@@ -72,6 +72,8 @@ class Core {
 		if (file_exists('./app/controllers/' . $url[0] . '.php')) {
 			$this->currentController = $url[0];
 		}
+		define('CONTROLLER', $this->currentController);
+
 
 		// 引入 Controller
 		// 實例化 Controller
@@ -89,6 +91,7 @@ class Core {
 				exit;
 			}
 		}
+		define('METHOD', $this->currentMethod);
 
 		// $url 陣列中的第三個值開始，視為帶入方法中的參數
 		// 用 $params 陣列儲存所有剩下的值
@@ -96,5 +99,34 @@ class Core {
 
 		// 最後透過呼叫 callback 來執行方法
 		call_user_func_array([$this->currentController, $this->currentMethod], $this->params);
+	}
+
+	protected function static() {
+		[$type, $file] = $this->getStatic();
+		$static_path = PUBLICROOT . "{$type}/" . implode('/', $file);
+		if (file_exists($static_path)) {
+			require_once APPROOT.'libraries/plugin/minify/vendor/autoload.php';
+			$upper_type = strtoupper($type);
+			$obj_name = "MatthiasMullie\\Minify\\{$upper_type}";
+			$obj = new $obj_name($static_path);
+
+			// $js = file_get_contents($static_path);
+			$js = $obj->minify();
+			$contentType = $type == 'css' ? 'text/css' : 'application/x-javascript';
+			header("Content-Type:{$contentType}");
+			echo $js;
+		} else {
+			echo '';
+		}
+	}
+
+	protected function getStatic() {
+		if (isset($_GET['url'])) {
+			$url = explode('/', filter_var(rtrim($_GET['url'], '/'), FILTER_SANITIZE_URL));
+			$static_arr = explode('-', array_shift($url));
+			$lastElement = explode('.', end($static_arr));
+			$static_type = end($lastElement);
+			return [$static_type, $static_arr];
+		}
 	}
 }

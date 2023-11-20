@@ -19,6 +19,10 @@ class Controller {
 		}
 	}
 
+	protected function jsmin($file){
+		
+	}
+
 	// public function database($table, $db = '') {
 	// 	if($db !=''){
 	// 		$table_path = "./app/database/{$db}/{$table}.php"; 

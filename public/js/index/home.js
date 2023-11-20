@@ -1,0 +1,3 @@
+$(()=>{
+	alert("Hellow world!!");
+})
