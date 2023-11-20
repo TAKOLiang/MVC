@@ -103,27 +103,24 @@ class Core {
 
 	protected function static() {
 		[$type, $file] = $this->getStatic();
-		$static_path = PUBLICROOT . "{$type}/" . implode('/', $file);
-		if (file_exists($static_path)) {
-			require_once APPROOT.'libraries/plugin/minify/vendor/autoload.php';
-			$upper_type = strtoupper($type);
-			$obj_name = "MatthiasMullie\\Minify\\{$upper_type}";
-			$obj = new $obj_name($static_path);
+		$static_path   = PUBLICROOT . "{$type}/" . implode('/', $file);
+		if (!file_exists($static_path)) exit('');
+		require_once APPROOT . 'libraries/plugin/minify/vendor/autoload.php';
+		$upper_type = strtoupper($type);
+		$obj_name   = "MatthiasMullie\\Minify\\{$upper_type}";
+		$obj        = new $obj_name($static_path);
 
-			// $js = file_get_contents($static_path);
-			$js = $obj->minify();
-			$contentType = $type == 'css' ? 'text/css' : 'application/x-javascript';
-			header("Content-Type:{$contentType}");
-			echo $js;
-		} else {
-			echo '';
-		}
+		// $js = file_get_contents($static_path);
+		$js          = $obj->minify();
+		$contentType = $type == 'css' ? 'text/css' : 'application/x-javascript';
+		header("Content-Type:{$contentType}");
+		echo $js;
 	}
 
 	protected function getStatic() {
 		if (isset($_GET['url'])) {
-			$url = explode('/', filter_var(rtrim($_GET['url'], '/'), FILTER_SANITIZE_URL));
-			$static_arr = explode('-', array_shift($url));
+			$url         = explode('/', filter_var(rtrim($_GET['url'], '/'), FILTER_SANITIZE_URL));
+			$static_arr  = explode('-', array_shift($url));
 			$lastElement = explode('.', end($static_arr));
 			$static_type = end($lastElement);
 			return [$static_type, $static_arr];
