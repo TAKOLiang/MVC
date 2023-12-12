@@ -103,16 +103,13 @@ class Core {
 
 	protected function static() {
 		[$type, $file] = $this->getStatic();
-		// $static_path   = PUBLICROOT . "{$type}/" . implode('/', $file);
-		// if (!file_exists($static_path)) exit('');
-		if($file == '') exit;
+		if($file == null || $type == null) exit;
 		require_once APPROOT . 'libraries/plugin/minify/vendor/autoload.php';
 
 		$upper_type = strtoupper($type);
 		$obj_name   = "MatthiasMullie\\Minify\\{$upper_type}";
 		$obj        = new $obj_name($file);
 
-		// $js = file_get_contents($static_path);
 		$js          = $obj->minify();
 		$contentType = $type == 'css' ? 'text/css' : 'application/x-javascript';
 		header("Content-Type:{$contentType}");
@@ -138,10 +135,8 @@ class Core {
 
 				$static_path = PUBLICROOT . "{$static_type}/".implode('/',$static_arr);
 				if (file_exists($static_path)) $static_file .= "\r\n".file_get_contents($static_path);
-
 				return [$static_type,$static_file];
 			}
-			// return [$static_type, $static_arr];
 		}
 	}
 }
