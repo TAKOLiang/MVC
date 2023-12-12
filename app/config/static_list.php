@@ -1,17 +1,18 @@
 <?php 
 
-$static=[];
+$_STATIC=[];
 
-$static['css']=[
+$_STATIC['css']=[
 	'index-home.css'=>[],
 ];
 
-$static['js']=[
-	'index-index.js'=>[],
+$_STATIC['js']=[
+	'index-index.js'=>['main.js'],
+	'index-home.js'=>['main.js'],
 ];
 
 
-$static_group=[
+$_STATIC_GROUP=[
 	'public'=>[
 		''
 	],

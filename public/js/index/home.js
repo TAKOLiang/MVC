@@ -1,3 +1,3 @@
 $(()=>{
-	alert("Hellow world!!");
-})
+	alert("Hellow index!!");
+});

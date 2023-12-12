@@ -103,12 +103,14 @@ class Core {
 
 	protected function static() {
 		[$type, $file] = $this->getStatic();
-		$static_path   = PUBLICROOT . "{$type}/" . implode('/', $file);
-		if (!file_exists($static_path)) exit('');
+		// $static_path   = PUBLICROOT . "{$type}/" . implode('/', $file);
+		// if (!file_exists($static_path)) exit('');
+		if($file == '') exit;
 		require_once APPROOT . 'libraries/plugin/minify/vendor/autoload.php';
+
 		$upper_type = strtoupper($type);
 		$obj_name   = "MatthiasMullie\\Minify\\{$upper_type}";
-		$obj        = new $obj_name($static_path);
+		$obj        = new $obj_name($file);
 
 		// $js = file_get_contents($static_path);
 		$js          = $obj->minify();
@@ -119,11 +121,27 @@ class Core {
 
 	protected function getStatic() {
 		if (isset($_GET['url'])) {
+			require_once APPROOT . 'config/static_list.php';
 			$url         = explode('/', filter_var(rtrim($_GET['url'], '/'), FILTER_SANITIZE_URL));
 			$static_arr  = explode('-', array_shift($url));
 			$lastElement = explode('.', end($static_arr));
 			$static_type = end($lastElement);
-			return [$static_type, $static_arr];
+
+			$static_name = implode('-', $static_arr);
+			if (!empty($_STATIC[$static_type][$static_name])) {
+				$static_file = '';
+				$staticList = $_STATIC[$static_type][$static_name];
+				foreach ($staticList as $val) {
+					$item_path = PUBLICROOT . "{$static_type}/com/{$val}";
+					if (file_exists($item_path)) $static_file .= file_get_contents($item_path);
+				}
+
+				$static_path = PUBLICROOT . "{$static_type}/".implode('/',$static_arr);
+				if (file_exists($static_path)) $static_file .= "\r\n".file_get_contents($static_path);
+
+				return [$static_type,$static_file];
+			}
+			// return [$static_type, $static_arr];
 		}
 	}
 }

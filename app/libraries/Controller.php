@@ -18,23 +18,4 @@ class Controller {
 			//die('View does not exist');
 		}
 	}
-
-	protected function jsmin($file){
-		
-	}
-
-	// public function database($table, $db = '') {
-	// 	if($db !=''){
-	// 		$table_path = "./app/database/{$db}/{$table}.php"; 
-	// 	}else{
-	// 		$table_path = "./app/database/{$table}.php";
-	// 	}
-
-	// 	if(file_exists($table_path)){
-	// 		require_once $table_path;
-	// 		return new $table();
-	// 	}else{
-	// 		die("database file not found !! \r\n");
-	// 	}
-	// }
 }
