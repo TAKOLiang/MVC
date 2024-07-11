@@ -2,8 +2,8 @@
 // Database 的參數
 define('DB_HOST', '127.0.0.1');
 // define('DB_NAME', 'M2');
-define('DB_USER', 'Liang');
-define('DB_PASS', 'Hcvs912026');
+define('DB_USER', '');
+define('DB_PASS', '');
 define('DB_PORT', '3306');
 // define('TABLE_NAME', ' ');
 
